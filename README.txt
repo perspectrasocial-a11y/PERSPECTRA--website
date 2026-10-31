@@ -1,16 +1,27 @@
-PERSPECTRA WEBSITE STARTER
-Open index.html in a browser to preview the responsive one-page website.
+PERSPECTRA WEBSITE - SEPARATED FILE STRUCTURE
 
-Before publishing:
-1. Replace hello@perspectra.studio with your confirmed agency email.
-2. Add real contact details, social links and business address only if desired.
-3. Replace concept-direction portfolio cards with approved work. The current site clearly labels them as concept directions, not completed client work.
-4. Confirm PERSPECTRA trademark, company name, domain and social handle availability.
-5. Connect a hosting provider/domain and configure analytics, privacy/cookie notices if needed.
-6. Review all copy, services, claims and terms before going live.
+Files:
+- index.html: page content and structure
+- css/styles.css: all page styling and responsive rules
+- js/main.js: mobile navigation, current year and subtle card tilt
+- js/three-scene.js: Three.js hero prism scene
+- assets/: approved PERSPECTRA logo assets
 
-Design:
-- Dark cinematic layout
-- Palette: #050507, #EFEBE2, #F1D7AC, #FAA056, #6C9EE4, #685BE6, #222B53, #A1A0A1
-- Typography: Manrope + Inter (Google Fonts; fallback fonts included)
-- Uses approved uploaded logo reference, with transparent extracted symbol for page header and hero.
+Run locally:
+1. Extract this folder.
+2. Open the folder in VS Code.
+3. Start index.html using Live Server (or another local HTTP server).
+4. Internet is required for Google Fonts and Three.js CDN.
+
+Deploy:
+Upload the complete PERSPECTRA_Website_Separated folder to a Git repository and import it into Vercel.
+Framework preset: Other
+Build command: leave empty
+Output directory: . (project root)
+Install command: leave empty
+
+Notes:
+- The Three.js script now selects the .heroart container correctly.
+- If WebGL is unavailable or reduced motion is enabled, the static logo fallback remains.
+- Replace hello@perspectra.studio with your confirmed email before launch.
+- Selected work items are concept directions and should be replaced with approved portfolio work.
