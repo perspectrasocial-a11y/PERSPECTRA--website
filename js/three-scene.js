@@ -69,6 +69,39 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
     });
     const crystal=new THREE.Mesh(crystalGeo,crystalMat); crystalRig.add(crystal);
 
+    // Explicit optical overlay guarantees visible transparent facets and spectral Fresnel edges.
+    // The PBR transmission layer supplies reflections; this shader supplies the clear glass read.
+    const opticalOverlay = new THREE.ShaderMaterial({
+      transparent:true, depthWrite:false, side:THREE.DoubleSide,
+      uniforms:{uTime:{value:0},uPop:{value:0}},
+      vertexShader:`varying vec3 vNormalW; varying vec3 vViewW; varying vec3 vPosW;
+        void main(){
+          vec4 worldPos=modelMatrix*vec4(position,1.0);
+          vPosW=worldPos.xyz;
+          vNormalW=normalize(mat3(modelMatrix)*normal);
+          vViewW=normalize(cameraPosition-worldPos.xyz);
+          gl_Position=projectionMatrix*viewMatrix*worldPos;
+        }`,
+      fragmentShader:`varying vec3 vNormalW; varying vec3 vViewW; varying vec3 vPosW;
+        uniform float uTime; uniform float uPop;
+        void main(){
+          vec3 n=normalize(vNormalW); vec3 v=normalize(vViewW);
+          float fres=pow(1.0-max(dot(n,v),0.0),2.15);
+          float rim=pow(1.0-max(dot(n,v),0.0),5.0);
+          float spectral=dot(n,normalize(vec3(.42,.66,.62)))*.5+.5;
+          vec3 rainbow=mix(vec3(.95,.52,.23),vec3(.38,.62,1.0),smoothstep(.12,.9,spectral));
+          rainbow=mix(rainbow,vec3(.62,.42,.92),smoothstep(.55,1.0,spectral)*.48);
+          float movingGlint=pow(max(0.0,sin(vPosW.y*3.4+vPosW.x*2.1+uTime*.85)),18.0);
+          vec3 colour=mix(vec3(.62,.76,.98),rainbow,.72);
+          colour += vec3(1.0,.82,.58)*(movingGlint*.65+uPop*.38);
+          float alpha=clamp(.055+fres*.42+rim*.36+movingGlint*.18+uPop*.14,.045,.78);
+          gl_FragColor=vec4(colour,alpha);
+        }`
+    });
+    const opticalShell=new THREE.Mesh(crystalGeo,opticalOverlay);
+    opticalShell.scale.setScalar(1.003);
+    crystalRig.add(opticalShell);
+
     // Fine polished edge glints, not a wireframe cage.
     const edgeGeo=new THREE.EdgesGeometry(crystalGeo, 8);
     const edgeMat=new THREE.LineBasicMaterial({color:0xf4e7d5,transparent:true,opacity:.62});
@@ -154,7 +187,7 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
       if(clickPulseTarget < .012) clickPulseTarget=0;
       // Crystal travels from upper-right towards lower-left as the visitor scrolls.
       crystalRig.position.set(2.25-smooth*4.25+mouseX,1.0-smooth*2.0-mouseY,0);
-      const popScale=1+clickPulse*.62;
+      opticalOverlay.uniforms.uTime.value=t; opticalOverlay.uniforms.uPop.value=clickPulse;\n      const popScale=1+clickPulse*.62;
       crystalRig.scale.setScalar((.88-smooth*.13)*popScale);
       crystalRig.rotation.set(.08+Math.sin(t*.19)*.055+mouseY-clickPulse*.18,
         -.22+Math.sin(t*.23)*.11+mouseX+clickPulse*.42,
@@ -174,7 +207,7 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
       renderer.render(scene,camera);
     };
     animate();
-    addEventListener('pagehide',()=>{disposed=true;cancelAnimationFrame(raf);renderer.dispose();pmrem.dispose();env.dispose();causticTexture.dispose();causticMaterial.dispose();crystalGeo.dispose();crystalMat.dispose();edgeGeo.dispose();pointGeo.dispose();netGeo.dispose();},{once:true});
+    addEventListener('pagehide',()=>{disposed=true;cancelAnimationFrame(raf);renderer.dispose();pmrem.dispose();env.dispose();causticTexture.dispose();causticMaterial.dispose();crystalGeo.dispose();crystalMat.dispose();opticalOverlay.dispose();edgeGeo.dispose();pointGeo.dispose();netGeo.dispose();},{once:true});
   } catch(error) {
     console.warn('PERSPECTRA optical scene could not initialise:',error);
     canvas.remove();

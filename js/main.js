@@ -9,49 +9,26 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
 }
 
 
-// Soft matte-glass cursor light: a broad diffused glow that gently catches up with the pointer.
+// Reliable desktop pointer tracking for the matte-glass light.
 (() => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (window.matchMedia('(hover: none)').matches) return;
-
-  const glow = document.createElement('div');
-  glow.id = 'perspectra-cursor-glow';
-  glow.setAttribute('aria-hidden', 'true');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || matchMedia('(hover: none)').matches) return;
+  const glow=document.createElement('div');
+  glow.id='perspectra-cursor-glow';
+  glow.setAttribute('aria-hidden','true');
   document.body.appendChild(glow);
-
-  let targetX = innerWidth * .5, targetY = innerHeight * .38;
-  let currentX = targetX, currentY = targetY;
-  let active = false, raf = 0;
-
-  const move = (event) => {
-    targetX = event.clientX;
-    targetY = event.clientY;
-    active = true;
-    glow.classList.add('is-active');
+  let x=innerWidth*.5,y=innerHeight*.4,tx=x,ty=y,visible=false;
+  const move=e=>{tx=e.clientX;ty=e.clientY;visible=true;glow.classList.add('is-active');};
+  const leave=()=>{visible=false;glow.classList.remove('is-active');};
+  window.addEventListener('pointermove',move,{passive:true});
+  window.addEventListener('blur',leave);
+  document.addEventListener('mouseleave',leave);
+  document.addEventListener('mouseenter',()=>{if(visible)glow.classList.add('is-active');});
+  const tick=()=>{
+    x+=(tx-x)*.14;y+=(ty-y)*.14;
+    glow.style.transform=`translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
+    requestAnimationFrame(tick);
   };
-  const leave = () => {
-    active = false;
-    glow.classList.remove('is-active');
-  };
-  addEventListener('pointermove', move, { passive: true });
-  document.documentElement.addEventListener('pointerleave', leave);
-  document.documentElement.addEventListener('pointerenter', () => {
-    if (active) glow.classList.add('is-active');
-  });
-
-  const animate = () => {
-    currentX += (targetX - currentX) * .095;
-    currentY += (targetY - currentY) * .095;
-    glow.style.setProperty('--glow-x', `${currentX}px`);
-    glow.style.setProperty('--glow-y', `${currentY}px`);
-    raf = requestAnimationFrame(animate);
-  };
-  animate();
-
-  addEventListener('pagehide', () => {
-    cancelAnimationFrame(raf);
-    glow.remove();
-  }, { once: true });
+  tick();
 })();
 
 

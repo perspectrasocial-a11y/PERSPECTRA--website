@@ -45,3 +45,8 @@ The Python source used to generate the caustics texture is included at tools/gen
     pip install -r requirements-python.txt
 Then regenerate the texture from the project root:
     python tools/generate_caustics.py
+
+VISUAL FIX UPDATE
+- Cursor glow now uses a dedicated 560x460px radial matte-glass light that follows pointer coordinates with easing and a high overlay stacking order.
+- Crystal now has an explicit GLSL optical overlay. This gives the facets visible transparency, Fresnel edge highlights and animated spectral colour independent of the PBR transmission render.
+- Existing physically based transmission and environment reflections remain underneath the optical overlay.

@@ -82,3 +82,24 @@ body.crystal-click-flash::after{
   100%{opacity:0;transform:scale(1.18)}
 }
 @media(prefers-reduced-motion:reduce){body.crystal-click-flash::after{display:none}}
+
+
+/* Stronger, unmistakable pointer-following frosted illumination */
+#perspectra-cursor-glow{
+  position:fixed!important;left:0;top:0;width:560px;height:460px;inset:auto!important;
+  z-index:99999!important;pointer-events:none!important;opacity:0;
+  border-radius:50%;
+  background:radial-gradient(ellipse at center,
+    rgba(151,137,255,.20) 0%,
+    rgba(116,129,255,.14) 23%,
+    rgba(94,115,213,.075) 48%,
+    rgba(82,104,180,.025) 66%,
+    transparent 76%);
+  filter:blur(19px);
+  mix-blend-mode:screen;
+  transition:opacity .25s ease;
+  will-change:transform;
+}
+#perspectra-cursor-glow.is-active{opacity:1}
+@media(max-width:760px){#perspectra-cursor-glow{display:none!important}}
+@media(prefers-reduced-motion:reduce){#perspectra-cursor-glow{display:none!important}}
