@@ -27,3 +27,6 @@ Notes:
 - Selected work items are concept directions and should be replaced with approved portfolio work.
 
 3D EXPERIENCE: Transparent glass prism follows a curved path through the viewport as visitors scroll. Includes spectral refraction streaks, linked neural-network nodes, pointer response, responsive opacity, and reduced-motion support. Implemented in js/three-scene.js and css/styles.css. Three.js loads from jsDelivr CDN.
+
+OPTICAL ART DIRECTION UPDATE
+Replaced the generic extruded triangular object with a faceted transparent optical crystal, environment reflections, internal facets, spectral dispersion beams and restrained neural connections. The crystal follows a diagonal path as the page scrolls. Main implementation: js/three-scene.js. Uses Three.js and its RoomEnvironment helper from jsDelivr.
