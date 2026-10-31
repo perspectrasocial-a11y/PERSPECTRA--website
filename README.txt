@@ -1,19 +1,13 @@
-PERSPECTRA — Hover Glass Update
+PERSPECTRA — Logo Hover Light
 
-Run: python tools/serve.py
-Open http://localhost:8000 (internet required for Three.js and fonts).
+Original PERSPECTRA logo stays intact and stationary.
+Hover the header logo or large homepage logo for soft spectral light.
+Moving the pointer changes the light position within the logo silhouette.
+Moving away fades the light. Keyboard focus also reveals the highlight.
+No separate prism, breaking, rotation, enlargement or page-wide cursor glow.
+The light is a CSS optical effect; no WebGL or Three.js required.
 
-Hover the header logo or the hero prism: glass expands, tilts and catches
-blue/violet/champagne light. It stays illuminated until you leave.
-Keyboard focus also activates the effect. Clicking the logo only navigates home.
-A broad matte violet-blue cursor light follows mouse movement above the page.
-Touch and reduced-motion users retain a static logo without cursor animation.
-If WebGL or the CDN is unavailable, the original logo remains visible.
-Glass uses transparent facets and stylized spectral highlights; it does not
-physically refract HTML text behind the canvas.
-
-Python source included:
-  tools/generate_caustics.py — generate spectral texture (see requirements-python.txt)
-  tools/serve.py — local preview server (standard library only)
-
+Preview: python tools/serve.py
+Open http://localhost:8000
+Python texture generator and requirements are included as optional source tools.
 Upload index.html, css/, js/ and assets/ to your static host.
