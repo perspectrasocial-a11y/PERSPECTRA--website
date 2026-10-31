@@ -30,3 +30,6 @@ Notes:
 
 OPTICAL ART DIRECTION UPDATE
 Replaced the generic extruded triangular object with a faceted transparent optical crystal, environment reflections, internal facets, spectral dispersion beams and restrained neural connections. The crystal follows a diagonal path as the page scrolls. Main implementation: js/three-scene.js. Uses Three.js and its RoomEnvironment helper from jsDelivr.
+
+ADVANCED OPTICS UPDATE
+Added a Python-generated spectral caustics texture, layered additive light sheet, and MeshPhysicalMaterial dispersion. The implementation combines Python-generated texture assets with GLSL spectral beam shaders and Three.js physically based glass. Texture asset: assets/spectral-caustics.png.

@@ -35,6 +35,17 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
 
     const crystalRig = new THREE.Group(); scene.add(crystalRig);
 
+    // Python-generated spectral caustics texture, softly layered behind the crystal.
+    const causticTexture = new THREE.TextureLoader().load('assets/spectral-caustics.png');
+    causticTexture.colorSpace = THREE.SRGBColorSpace;
+    const causticMaterial = new THREE.MeshBasicMaterial({
+      map: causticTexture, transparent: true, opacity: .42,
+      blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+    });
+    const causticSheet = new THREE.Mesh(new THREE.PlaneGeometry(9.2, 5.8), causticMaterial);
+    causticSheet.position.set(0, 0, -1.7);
+    scene.add(causticSheet);
+
     // A sharply cut triangular optical crystal, with a deep body and polished bevelled edges.
     const h = 2.05, w = 1.72, d = .92;
     const verts = [
@@ -52,7 +63,7 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
     crystalGeo.computeVertexNormals();
     const crystalMat=new THREE.MeshPhysicalMaterial({
       color:0xeaf1ff, metalness:.02, roughness:.035, transmission:1,
-      thickness:2.8, ior:1.52, envMapIntensity:1.7,
+      thickness:2.8, ior:1.52, dispersion:.12, envMapIntensity:1.9,
       clearcoat:1, clearcoatRoughness:.015, attenuationColor:new THREE.Color('#d9e7ff'),
       attenuationDistance:2.2, side:THREE.DoubleSide
     });
@@ -142,6 +153,10 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
       crystalRig.rotation.set(.08+Math.sin(t*.19)*.055+mouseY,-.22+Math.sin(t*.23)*.11+mouseX,Math.sin(t*.14)*.025);
       inner.rotation.set(t*.18,t*-.24,t*.09);
       flare.position.set(crystalRig.position.x-.22,crystalRig.position.y-.12,-.4);
+      causticSheet.position.x = crystalRig.position.x * .28;
+      causticSheet.position.y = crystalRig.position.y * .22;
+      causticSheet.rotation.z = -.08 + Math.sin(t*.12)*.025;
+      causticMaterial.opacity = .34 + Math.sin(t*.35)*.045;
       flare.material.rotation=t*.025;
       beams.forEach((b,i)=>{b.position.x=crystalRig.position.x+(i-1.5)*.15;b.position.y=crystalRig.position.y+(i-1.5)*.12;b.material.uniforms.uTime.value=t;b.material.uniforms.uStrength.value=(.65+Math.sin(t*.45+i)*.12)*(1-smooth*.08)});
       pointCloud.rotation.y=network.rotation.y=Math.sin(t*.07)*.035;
@@ -149,7 +164,7 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
       renderer.render(scene,camera);
     };
     animate();
-    addEventListener('pagehide',()=>{disposed=true;cancelAnimationFrame(raf);renderer.dispose();pmrem.dispose();env.dispose();crystalGeo.dispose();crystalMat.dispose();edgeGeo.dispose();pointGeo.dispose();netGeo.dispose();},{once:true});
+    addEventListener('pagehide',()=>{disposed=true;cancelAnimationFrame(raf);renderer.dispose();pmrem.dispose();env.dispose();causticTexture.dispose();causticMaterial.dispose();crystalGeo.dispose();crystalMat.dispose();edgeGeo.dispose();pointGeo.dispose();netGeo.dispose();},{once:true});
   } catch(error) {
     console.warn('PERSPECTRA optical scene could not initialise:',error);
     canvas.remove();
