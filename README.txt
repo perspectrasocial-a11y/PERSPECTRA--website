@@ -13,3 +13,5 @@ Python texture generator and requirements are included as optional source tools.
 Upload index.html, css/, js/ and assets/ to your static host.
 
 Hero logo brightness reduced with muted colour and softer hover highlights.
+
+Email button opens Gmail compose in a new tab, addressed to perspectra.social@gmail.com, with an editable creative services enquiry template. The visitor sends it manually. Gmail sign-in may be required.
