@@ -11,3 +11,5 @@ Preview: python tools/serve.py
 Open http://localhost:8000
 Python texture generator and requirements are included as optional source tools.
 Upload index.html, css/, js/ and assets/ to your static host.
+
+Hero logo brightness reduced with muted colour and softer hover highlights.

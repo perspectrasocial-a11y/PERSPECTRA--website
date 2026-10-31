@@ -30,3 +30,11 @@ section{padding:115px 0}.section-head{display:flex;justify-content:space-between
 .logo-light:focus-visible::after,.brand:focus-visible .logo-light::after{opacity:1}
 @media(max-width:850px){.heroart .logo-light{max-width:400px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.logo-light::after{transition:none}}
+
+/* Lower-key hero artwork blends into the charcoal-blue background. */
+.heroart .logo-light img{
+ opacity:.72;
+ filter:brightness(.66) saturate(.78) drop-shadow(0 12px 35px rgba(104,91,230,.09));
+}
+@media(hover:hover){.heroart .logo-light:hover::after{opacity:.3}}
+.heroart .logo-light:focus-visible::after{opacity:.3}
