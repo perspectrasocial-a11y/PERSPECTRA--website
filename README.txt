@@ -1,52 +1,19 @@
-PERSPECTRA WEBSITE - SEPARATED FILE STRUCTURE
+PERSPECTRA — Hover Glass Update
 
-Files:
-- index.html: page content and structure
-- css/styles.css: all page styling and responsive rules
-- js/main.js: mobile navigation, current year and subtle card tilt
-- js/three-scene.js: Three.js hero prism scene
-- assets/: approved PERSPECTRA logo assets
+Run: python tools/serve.py
+Open http://localhost:8000 (internet required for Three.js and fonts).
 
-Run locally:
-1. Extract this folder.
-2. Open the folder in VS Code.
-3. Start index.html using Live Server (or another local HTTP server).
-4. Internet is required for Google Fonts and Three.js CDN.
+Hover the header logo or the hero prism: glass expands, tilts and catches
+blue/violet/champagne light. It stays illuminated until you leave.
+Keyboard focus also activates the effect. Clicking the logo only navigates home.
+A broad matte violet-blue cursor light follows mouse movement above the page.
+Touch and reduced-motion users retain a static logo without cursor animation.
+If WebGL or the CDN is unavailable, the original logo remains visible.
+Glass uses transparent facets and stylized spectral highlights; it does not
+physically refract HTML text behind the canvas.
 
-Deploy:
-Upload the complete PERSPECTRA_Website_Separated folder to a Git repository and import it into Vercel.
-Framework preset: Other
-Build command: leave empty
-Output directory: . (project root)
-Install command: leave empty
+Python source included:
+  tools/generate_caustics.py — generate spectral texture (see requirements-python.txt)
+  tools/serve.py — local preview server (standard library only)
 
-Notes:
-- The Three.js script now selects the .heroart container correctly.
-- If WebGL is unavailable or reduced motion is enabled, the static logo fallback remains.
-- Replace hello@perspectra.studio with your confirmed email before launch.
-- Selected work items are concept directions and should be replaced with approved portfolio work.
-
-3D EXPERIENCE: Transparent glass prism follows a curved path through the viewport as visitors scroll. Includes spectral refraction streaks, linked neural-network nodes, pointer response, responsive opacity, and reduced-motion support. Implemented in js/three-scene.js and css/styles.css. Three.js loads from jsDelivr CDN.
-
-OPTICAL ART DIRECTION UPDATE
-Replaced the generic extruded triangular object with a faceted transparent optical crystal, environment reflections, internal facets, spectral dispersion beams and restrained neural connections. The crystal follows a diagonal path as the page scrolls. Main implementation: js/three-scene.js. Uses Three.js and its RoomEnvironment helper from jsDelivr.
-
-ADVANCED OPTICS UPDATE
-Added a Python-generated spectral caustics texture, layered additive light sheet, and MeshPhysicalMaterial dispersion. The implementation combines Python-generated texture assets with GLSL spectral beam shaders and Three.js physically based glass. Texture asset: assets/spectral-caustics.png.
-
-CURSOR LIGHT UPDATE
-Added a soft matte-glass cursor-tracking glow. It follows the pointer with eased motion, layered cool-violet/blue diffusion and subtle frosted-light blur. Disabled on touch devices and when reduced motion is requested. Implemented in js/main.js and css/styles.css.
-
-LOGO-CLICK CRYSTAL REVEAL
-Click the PERSPECTRA symbol/wordmark in the header or the crystal artwork in the hero. The crystal scales forward, rotates with a short dimensional pop, and intensifies its warm/cool lighting and caustic reflections. Implemented with a custom event between js/main.js and js/three-scene.js.
-
-PYTHON SOURCE
-The Python source used to generate the caustics texture is included at tools/generate_caustics.py. Install dependencies with:
-    pip install -r requirements-python.txt
-Then regenerate the texture from the project root:
-    python tools/generate_caustics.py
-
-VISUAL FIX UPDATE
-- Cursor glow now uses a dedicated 560x460px radial matte-glass light that follows pointer coordinates with easing and a high overlay stacking order.
-- Crystal now has an explicit GLSL optical overlay. This gives the facets visible transparency, Fresnel edge highlights and animated spectral colour independent of the PBR transmission render.
-- Existing physically based transmission and environment reflections remain underneath the optical overlay.
+Upload index.html, css/, js/ and assets/ to your static host.

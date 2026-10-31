@@ -61,46 +61,29 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
     const crystalGeo=new THREE.BufferGeometry();
     crystalGeo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
     crystalGeo.computeVertexNormals();
-    const crystalMat=new THREE.MeshPhysicalMaterial({
-      color:0xeaf1ff, metalness:.02, roughness:.035, transmission:1,
-      thickness:2.8, ior:1.52, dispersion:.12, envMapIntensity:1.9,
-      clearcoat:1, clearcoatRoughness:.015, attenuationColor:new THREE.Color('#d9e7ff'),
-      attenuationDistance:2.2, side:THREE.DoubleSide
-    });
-    const crystal=new THREE.Mesh(crystalGeo,crystalMat); crystalRig.add(crystal);
-
-    // Explicit optical overlay guarantees visible transparent facets and spectral Fresnel edges.
-    // The PBR transmission layer supplies reflections; this shader supplies the clear glass read.
-    const opticalOverlay = new THREE.ShaderMaterial({
-      transparent:true, depthWrite:false, side:THREE.DoubleSide,
-      uniforms:{uTime:{value:0},uPop:{value:0}},
-      vertexShader:`varying vec3 vNormalW; varying vec3 vViewW; varying vec3 vPosW;
-        void main(){
-          vec4 worldPos=modelMatrix*vec4(position,1.0);
-          vPosW=worldPos.xyz;
-          vNormalW=normalize(mat3(modelMatrix)*normal);
-          vViewW=normalize(cameraPosition-worldPos.xyz);
-          gl_Position=projectionMatrix*viewMatrix*worldPos;
-        }`,
-      fragmentShader:`varying vec3 vNormalW; varying vec3 vViewW; varying vec3 vPosW;
-        uniform float uTime; uniform float uPop;
-        void main(){
-          vec3 n=normalize(vNormalW); vec3 v=normalize(vViewW);
-          float fres=pow(1.0-max(dot(n,v),0.0),2.15);
-          float rim=pow(1.0-max(dot(n,v),0.0),5.0);
-          float spectral=dot(n,normalize(vec3(.42,.66,.62)))*.5+.5;
-          vec3 rainbow=mix(vec3(.95,.52,.23),vec3(.38,.62,1.0),smoothstep(.12,.9,spectral));
-          rainbow=mix(rainbow,vec3(.62,.42,.92),smoothstep(.55,1.0,spectral)*.48);
-          float movingGlint=pow(max(0.0,sin(vPosW.y*3.4+vPosW.x*2.1+uTime*.85)),18.0);
-          vec3 colour=mix(vec3(.62,.76,.98),rainbow,.72);
-          colour += vec3(1.0,.82,.58)*(movingGlint*.65+uPop*.38);
-          float alpha=clamp(.055+fres*.42+rim*.36+movingGlint*.18+uPop*.14,.045,.78);
-          gl_FragColor=vec4(colour,alpha);
+    // Alpha glass lets the actual HTML background remain visible through facets.
+    const crystalMat=new THREE.ShaderMaterial({
+      transparent:true, depthWrite:false, side:THREE.FrontSide,
+      uniforms:{uTime:{value:0},uHover:{value:0}},
+      vertexShader:`varying vec3 vNormal; varying vec3 vView; varying vec3 vLocal;
+        void main(){vec4 mv=modelViewMatrix*vec4(position,1.0);
+        vNormal=normalize(normalMatrix*normal);vView=-mv.xyz;vLocal=position;
+        gl_Position=projectionMatrix*mv;}`,
+      fragmentShader:`varying vec3 vNormal;varying vec3 vView;varying vec3 vLocal;
+        uniform float uTime;uniform float uHover;
+        void main(){vec3 n=normalize(vNormal);vec3 v=normalize(vView);
+          float fresnel=pow(1.0-abs(dot(n,v)),2.6);
+          vec3 light=normalize(vec3(sin(uTime*.4)*.6,.8,1.0));
+          float glint=pow(max(dot(reflect(-light,n),v),0.0),48.0);
+          float band=pow(.5+.5*sin(vLocal.x*2.8+vLocal.y*3.6+uTime*.55),14.0);
+          vec3 spectral=.5+.5*cos(vec3(0.0,2.1,4.2)+vLocal.y*1.8+vLocal.x+uTime*.15);
+          vec3 color=mix(vec3(.38,.58,.9),vec3(.92,.82,.64),fresnel);
+          color+=spectral*band*(.25+uHover*.45)+glint*.8;
+          float alpha=clamp(.065+fresnel*.46+band*.07+glint*.35+uHover*.035,.05,.7);
+          gl_FragColor=vec4(color,alpha);
         }`
     });
-    const opticalShell=new THREE.Mesh(crystalGeo,opticalOverlay);
-    opticalShell.scale.setScalar(1.003);
-    crystalRig.add(opticalShell);
+    const crystal=new THREE.Mesh(crystalGeo,crystalMat); crystalRig.add(crystal);
 
     // Fine polished edge glints, not a wireframe cage.
     const edgeGeo=new THREE.EdgesGeometry(crystalGeo, 8);
@@ -109,7 +92,7 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
 
     // Internal cut planes create the multi-faceted gemstone highlight.
     const inner=new THREE.Mesh(new THREE.OctahedronGeometry(.53,0),
-      new THREE.MeshPhysicalMaterial({color:0xe6efff,metalness:.1,roughness:.06,transmission:.72,thickness:1.6,ior:1.58,envMapIntensity:1.6,clearcoat:1}));
+      crystalMat);
     inner.position.set(.02,.04,.05); crystalRig.add(inner);
 
     // Soft spectral beam shader: a narrow white core with a dispersed rainbow fringe.
@@ -167,11 +150,11 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
     const network=new THREE.LineSegments(netGeo,new THREE.LineBasicMaterial({color:0x829bd1,transparent:true,opacity:.075}));
     scene.add(network);
 
-    let scroll=0,smooth=0,mouseX=0,mouseY=0,clickPulse=0,clickPulseTarget=0;
+    let scroll=0,smooth=0,mouseX=0,mouseY=0,clickPulse=0,clickPulseTarget=window.perspectraHover ? 1 : 0;
     const updateScroll=()=>{scroll=Math.max(0,Math.min(1,scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight)));};
     addEventListener('scroll',updateScroll,{passive:true});updateScroll();
-    // Clicking either PERSPECTRA mark triggers a dimensional crystal reveal.
-    addEventListener('perspectra:crystal-pop',()=>{clickPulseTarget=1;});
+    // Hover or focus controls the sustained reveal.
+    addEventListener('perspectra:crystal-hover',e=>{clickPulseTarget=e.detail.active ? 1 : 0;});
     addEventListener('pointermove',e=>{mouseX=(e.clientX/innerWidth-.5)*.24;mouseY=(e.clientY/innerHeight-.5)*.18},{passive:true});
     addEventListener('resize',()=>{
       camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
@@ -183,12 +166,18 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
       raf=requestAnimationFrame(animate);
       const t=clock.getElapsedTime();smooth+=(scroll-smooth)*.035;
       clickPulse += (clickPulseTarget-clickPulse)*.16;
-      clickPulseTarget *= .91;
-      if(clickPulseTarget < .012) clickPulseTarget=0;
+      crystalMat.uniforms.uTime.value=t;
+      crystalMat.uniforms.uHover.value=clickPulse;
+      edgeMat.opacity=.38+clickPulse*.5;
       // Crystal travels from upper-right towards lower-left as the visitor scrolls.
-      crystalRig.position.set(2.25-smooth*4.25+mouseX,1.0-smooth*2.0-mouseY,0);
-      opticalOverlay.uniforms.uTime.value=t; opticalOverlay.uniforms.uPop.value=clickPulse;\n      const popScale=1+clickPulse*.62;
-      crystalRig.scale.setScalar((.88-smooth*.13)*popScale);
+      const rect=document.querySelector('.heroart').getBoundingClientRect();
+      const viewHeight=2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*10;
+      const viewWidth=viewHeight*camera.aspect;
+      const anchorX=((rect.left+rect.width/2)/innerWidth-.5)*viewWidth;
+      const anchorY=(.5-(rect.top+rect.height/2)/innerHeight)*viewHeight;
+      crystalRig.position.set(anchorX+mouseX,anchorY-mouseY,clickPulse*.45);
+      const popScale=1+clickPulse*.28;
+      crystalRig.scale.setScalar(Math.min(.78,rect.width/innerWidth*viewWidth/5.4)*popScale);
       crystalRig.rotation.set(.08+Math.sin(t*.19)*.055+mouseY-clickPulse*.18,
         -.22+Math.sin(t*.23)*.11+mouseX+clickPulse*.42,
         Math.sin(t*.14)*.025+clickPulse*.16);
@@ -206,8 +195,9 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
       rim.intensity=18+clickPulse*36;
       renderer.render(scene,camera);
     };
+    document.body.classList.add("prism-ready");
     animate();
-    addEventListener('pagehide',()=>{disposed=true;cancelAnimationFrame(raf);renderer.dispose();pmrem.dispose();env.dispose();causticTexture.dispose();causticMaterial.dispose();crystalGeo.dispose();crystalMat.dispose();opticalOverlay.dispose();edgeGeo.dispose();pointGeo.dispose();netGeo.dispose();},{once:true});
+    addEventListener('pagehide',()=>{disposed=true;cancelAnimationFrame(raf);renderer.dispose();pmrem.dispose();env.dispose();causticTexture.dispose();causticMaterial.dispose();crystalGeo.dispose();crystalMat.dispose();edgeGeo.dispose();pointGeo.dispose();netGeo.dispose();},{once:true});
   } catch(error) {
     console.warn('PERSPECTRA optical scene could not initialise:',error);
     canvas.remove();

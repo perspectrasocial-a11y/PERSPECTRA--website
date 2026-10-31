@@ -9,39 +9,66 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
 }
 
 
-// Reliable desktop pointer tracking for the matte-glass light.
+// Soft matte-glass cursor light: a broad diffused glow that gently catches up with the pointer.
 (() => {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || matchMedia('(hover: none)').matches) return;
-  const glow=document.createElement('div');
-  glow.id='perspectra-cursor-glow';
-  glow.setAttribute('aria-hidden','true');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia('(hover: none)').matches) return;
+
+  const glow = document.createElement('div');
+  glow.id = 'perspectra-cursor-glow';
+  glow.setAttribute('aria-hidden', 'true');
   document.body.appendChild(glow);
-  let x=innerWidth*.5,y=innerHeight*.4,tx=x,ty=y,visible=false;
-  const move=e=>{tx=e.clientX;ty=e.clientY;visible=true;glow.classList.add('is-active');};
-  const leave=()=>{visible=false;glow.classList.remove('is-active');};
-  window.addEventListener('pointermove',move,{passive:true});
-  window.addEventListener('blur',leave);
-  document.addEventListener('mouseleave',leave);
-  document.addEventListener('mouseenter',()=>{if(visible)glow.classList.add('is-active');});
-  const tick=()=>{
-    x+=(tx-x)*.14;y+=(ty-y)*.14;
-    glow.style.transform=`translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
-    requestAnimationFrame(tick);
+
+  let targetX = innerWidth * .5, targetY = innerHeight * .38;
+  let currentX = targetX, currentY = targetY;
+  let active = false, raf = 0;
+
+  const move = (event) => {
+    if(event.pointerType === 'touch') return;
+    targetX = event.clientX;
+    targetY = event.clientY;
+    active = true;
+    glow.classList.add('is-active');
   };
-  tick();
+  const leave = () => {
+    active = false;
+    glow.classList.remove('is-active');
+  };
+  addEventListener('pointermove', move, { passive: true });
+  document.documentElement.addEventListener('pointerleave', leave);
+  document.documentElement.addEventListener('pointerenter', () => {
+    if (active) glow.classList.add('is-active');
+  });
+
+  const animate = () => {
+    currentX += (targetX - currentX) * .095;
+    currentY += (targetY - currentY) * .095;
+    glow.style.setProperty('--glow-x', `${currentX}px`);
+    glow.style.setProperty('--glow-y', `${currentY}px`);
+    raf = requestAnimationFrame(animate);
+  };
+  animate();
+
+  addEventListener('blur', leave);
 })();
 
 
-// Clicking the brand mark or hero prism triggers a 3D crystal pop and optical flare.
+// Hover stays active until both pointer and keyboard focus leave the triggers.
 (() => {
-  const triggers = document.querySelectorAll('.brand, .heroart img');
-  triggers.forEach((el) => {
-    el.addEventListener('click', () => {
-      window.dispatchEvent(new CustomEvent('perspectra:crystal-pop'));
-      document.body.classList.remove('crystal-click-flash');
-      void document.body.offsetWidth;
-      document.body.classList.add('crystal-click-flash');
-      window.setTimeout(() => document.body.classList.remove('crystal-click-flash'), 850);
-    });
+  const triggers = [...document.querySelectorAll('.brand, .heroart')];
+  const hovered = new Set();
+  function update() {
+    const active = hovered.size > 0 || triggers.some(el => el.contains(document.activeElement));
+    window.perspectraHover = active;
+    document.body.classList.toggle('crystal-hover', active);
+    window.dispatchEvent(new CustomEvent('perspectra:crystal-hover', {detail: {active}}));
+  }
+  triggers.forEach(el => {
+    el.addEventListener('pointerenter', e => {if(e.pointerType !== 'touch'){hovered.add(el);update();}});
+    el.addEventListener('pointerleave', () => {hovered.delete(el);update();});
+    el.addEventListener('pointercancel', () => {hovered.delete(el);update();});
+    el.addEventListener('focusin', update);
+    el.addEventListener('focusout', () => queueMicrotask(update));
   });
+  window.addEventListener('blur', () => {hovered.clear();window.perspectraHover=false;document.body.classList.remove('crystal-hover');window.dispatchEvent(new CustomEvent('perspectra:crystal-hover',{detail:{active:false}}));});
 })();

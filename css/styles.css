@@ -63,43 +63,25 @@ body>*:not(#perspectra-lightfield){position:relative;z-index:3}
 #perspectra-cursor-glow.is-active{opacity:1}
 body>*:not(#perspectra-lightfield):not(#perspectra-cursor-glow){position:relative;z-index:3}
 .nav{z-index:12}
-@media(max-width:760px){#perspectra-cursor-glow{display:none}}
+
 @media(prefers-reduced-motion:reduce){#perspectra-cursor-glow{display:none}}
 
 
-/* Brand-mark interaction: a restrained optical flare when the crystal pops forward. */
-.brand,.heroart img{cursor:pointer}
-.brand img{transition:filter .35s ease,transform .35s cubic-bezier(.2,.8,.2,1)}
-.brand:hover img{filter:drop-shadow(0 0 10px rgba(156,180,255,.55));transform:scale(1.08)}
-body.crystal-click-flash::after{
-  content:"";position:fixed;inset:0;z-index:11;pointer-events:none;
-  background:radial-gradient(circle at 58% 43%,rgba(255,232,190,.16),rgba(115,139,255,.075) 22%,transparent 54%);
-  animation:crystalFlash .82s ease-out forwards;
+/* Final stacking rules: fixed effects must not be overridden by body children. */
+body > #perspectra-cursor-glow {
+  position:fixed;inset:0;z-index:30;pointer-events:none;
+  background:
+    radial-gradient(ellipse 300px 250px at var(--glow-x) var(--glow-y),rgba(133,112,255,.28),rgba(95,125,245,.12) 40%,transparent 75%),
+    radial-gradient(ellipse 110px 95px at var(--glow-x) var(--glow-y),rgba(215,230,255,.16),transparent 80%);
+  filter:blur(18px);mix-blend-mode:screen;
 }
-@keyframes crystalFlash{
-  0%{opacity:0;transform:scale(.72)}
-  24%{opacity:1}
-  100%{opacity:0;transform:scale(1.18)}
-}
-@media(prefers-reduced-motion:reduce){body.crystal-click-flash::after{display:none}}
-
-
-/* Stronger, unmistakable pointer-following frosted illumination */
-#perspectra-cursor-glow{
-  position:fixed!important;left:0;top:0;width:560px;height:460px;inset:auto!important;
-  z-index:99999!important;pointer-events:none!important;opacity:0;
-  border-radius:50%;
-  background:radial-gradient(ellipse at center,
-    rgba(151,137,255,.20) 0%,
-    rgba(116,129,255,.14) 23%,
-    rgba(94,115,213,.075) 48%,
-    rgba(82,104,180,.025) 66%,
-    transparent 76%);
-  filter:blur(19px);
-  mix-blend-mode:screen;
-  transition:opacity .25s ease;
-  will-change:transform;
-}
-#perspectra-cursor-glow.is-active{opacity:1}
-@media(max-width:760px){#perspectra-cursor-glow{display:none!important}}
-@media(prefers-reduced-motion:reduce){#perspectra-cursor-glow{display:none!important}}
+body > .nav{position:fixed;z-index:12}
+body > #perspectra-lightfield{position:fixed;z-index:4;opacity:1;mix-blend-mode:normal}
+.heroart{outline-offset:8px}
+.heroart img{opacity:.8;transition:opacity .5s,transform .5s,filter .5s}
+.prism-ready .heroart img{opacity:0}
+.brand img{transition:filter .4s,transform .4s}
+.crystal-hover .brand img{filter:drop-shadow(0 0 12px #8fafff);transform:perspective(400px) rotateY(-18deg) scale(1.12)}
+body:not(.prism-ready).crystal-hover .heroart img{transform:perspective(900px) rotateY(-12deg) scale(1.08);filter:drop-shadow(0 0 30px #879cec)}
+@media(hover:none),(prefers-reduced-motion:reduce){body > #perspectra-cursor-glow{display:none}}
+@media(prefers-reduced-motion:reduce){.brand img,.heroart img{transition:none!important;transform:none!important}}
