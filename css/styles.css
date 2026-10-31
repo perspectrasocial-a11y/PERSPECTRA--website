@@ -38,3 +38,47 @@ body>*:not(#perspectra-lightfield){position:relative;z-index:3}
 .heroart img{opacity:.06}
 @media(max-width:760px){#perspectra-lightfield{opacity:.68}}
 @media(prefers-reduced-motion:reduce){#perspectra-lightfield{display:none}}
+
+
+/* Cursor-tracked matte glass illumination */
+#perspectra-lightfield{z-index:1}
+#perspectra-cursor-glow{
+  --glow-x:50vw;--glow-y:38vh;
+  position:fixed;inset:0;z-index:2;pointer-events:none;
+  opacity:0;transition:opacity .65s ease;
+  background:
+    radial-gradient(ellipse 310px 260px at var(--glow-x) var(--glow-y),
+      rgba(133,112,255,.17) 0%,
+      rgba(105,119,245,.105) 26%,
+      rgba(92,111,190,.055) 48%,
+      transparent 74%),
+    radial-gradient(ellipse 145px 125px at var(--glow-x) var(--glow-y),
+      rgba(222,220,255,.095) 0%,
+      rgba(166,177,255,.045) 42%,
+      transparent 78%);
+  mix-blend-mode:screen;
+  filter:blur(13px);
+  will-change:background;
+}
+#perspectra-cursor-glow.is-active{opacity:1}
+body>*:not(#perspectra-lightfield):not(#perspectra-cursor-glow){position:relative;z-index:3}
+.nav{z-index:12}
+@media(max-width:760px){#perspectra-cursor-glow{display:none}}
+@media(prefers-reduced-motion:reduce){#perspectra-cursor-glow{display:none}}
+
+
+/* Brand-mark interaction: a restrained optical flare when the crystal pops forward. */
+.brand,.heroart img{cursor:pointer}
+.brand img{transition:filter .35s ease,transform .35s cubic-bezier(.2,.8,.2,1)}
+.brand:hover img{filter:drop-shadow(0 0 10px rgba(156,180,255,.55));transform:scale(1.08)}
+body.crystal-click-flash::after{
+  content:"";position:fixed;inset:0;z-index:11;pointer-events:none;
+  background:radial-gradient(circle at 58% 43%,rgba(255,232,190,.16),rgba(115,139,255,.075) 22%,transparent 54%);
+  animation:crystalFlash .82s ease-out forwards;
+}
+@keyframes crystalFlash{
+  0%{opacity:0;transform:scale(.72)}
+  24%{opacity:1}
+  100%{opacity:0;transform:scale(1.18)}
+}
+@media(prefers-reduced-motion:reduce){body.crystal-click-flash::after{display:none}}

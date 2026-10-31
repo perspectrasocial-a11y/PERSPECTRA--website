@@ -134,9 +134,11 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
     const network=new THREE.LineSegments(netGeo,new THREE.LineBasicMaterial({color:0x829bd1,transparent:true,opacity:.075}));
     scene.add(network);
 
-    let scroll=0,smooth=0,mouseX=0,mouseY=0;
+    let scroll=0,smooth=0,mouseX=0,mouseY=0,clickPulse=0,clickPulseTarget=0;
     const updateScroll=()=>{scroll=Math.max(0,Math.min(1,scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight)));};
     addEventListener('scroll',updateScroll,{passive:true});updateScroll();
+    // Clicking either PERSPECTRA mark triggers a dimensional crystal reveal.
+    addEventListener('perspectra:crystal-pop',()=>{clickPulseTarget=1;});
     addEventListener('pointermove',e=>{mouseX=(e.clientX/innerWidth-.5)*.24;mouseY=(e.clientY/innerHeight-.5)*.18},{passive:true});
     addEventListener('resize',()=>{
       camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
@@ -147,20 +149,28 @@ import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/exam
       if(disposed)return;
       raf=requestAnimationFrame(animate);
       const t=clock.getElapsedTime();smooth+=(scroll-smooth)*.035;
+      clickPulse += (clickPulseTarget-clickPulse)*.16;
+      clickPulseTarget *= .91;
+      if(clickPulseTarget < .012) clickPulseTarget=0;
       // Crystal travels from upper-right towards lower-left as the visitor scrolls.
       crystalRig.position.set(2.25-smooth*4.25+mouseX,1.0-smooth*2.0-mouseY,0);
-      crystalRig.scale.setScalar(.88-smooth*.13);
-      crystalRig.rotation.set(.08+Math.sin(t*.19)*.055+mouseY,-.22+Math.sin(t*.23)*.11+mouseX,Math.sin(t*.14)*.025);
+      const popScale=1+clickPulse*.62;
+      crystalRig.scale.setScalar((.88-smooth*.13)*popScale);
+      crystalRig.rotation.set(.08+Math.sin(t*.19)*.055+mouseY-clickPulse*.18,
+        -.22+Math.sin(t*.23)*.11+mouseX+clickPulse*.42,
+        Math.sin(t*.14)*.025+clickPulse*.16);
       inner.rotation.set(t*.18,t*-.24,t*.09);
       flare.position.set(crystalRig.position.x-.22,crystalRig.position.y-.12,-.4);
       causticSheet.position.x = crystalRig.position.x * .28;
       causticSheet.position.y = crystalRig.position.y * .22;
       causticSheet.rotation.z = -.08 + Math.sin(t*.12)*.025;
-      causticMaterial.opacity = .34 + Math.sin(t*.35)*.045;
+      causticMaterial.opacity = .34 + Math.sin(t*.35)*.045 + clickPulse*.32;
       flare.material.rotation=t*.025;
       beams.forEach((b,i)=>{b.position.x=crystalRig.position.x+(i-1.5)*.15;b.position.y=crystalRig.position.y+(i-1.5)*.12;b.material.uniforms.uTime.value=t;b.material.uniforms.uStrength.value=(.65+Math.sin(t*.45+i)*.12)*(1-smooth*.08)});
       pointCloud.rotation.y=network.rotation.y=Math.sin(t*.07)*.035;
-      warm.intensity=42+Math.sin(t*.8)*7;cool.intensity=30+Math.cos(t*.6)*7;
+      warm.intensity=42+Math.sin(t*.8)*7+clickPulse*72;
+      cool.intensity=30+Math.cos(t*.6)*7+clickPulse*48;
+      rim.intensity=18+clickPulse*36;
       renderer.render(scene,camera);
     };
     animate();

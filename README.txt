@@ -33,3 +33,15 @@ Replaced the generic extruded triangular object with a faceted transparent optic
 
 ADVANCED OPTICS UPDATE
 Added a Python-generated spectral caustics texture, layered additive light sheet, and MeshPhysicalMaterial dispersion. The implementation combines Python-generated texture assets with GLSL spectral beam shaders and Three.js physically based glass. Texture asset: assets/spectral-caustics.png.
+
+CURSOR LIGHT UPDATE
+Added a soft matte-glass cursor-tracking glow. It follows the pointer with eased motion, layered cool-violet/blue diffusion and subtle frosted-light blur. Disabled on touch devices and when reduced motion is requested. Implemented in js/main.js and css/styles.css.
+
+LOGO-CLICK CRYSTAL REVEAL
+Click the PERSPECTRA symbol/wordmark in the header or the crystal artwork in the hero. The crystal scales forward, rotates with a short dimensional pop, and intensifies its warm/cool lighting and caustic reflections. Implemented with a custom event between js/main.js and js/three-scene.js.
+
+PYTHON SOURCE
+The Python source used to generate the caustics texture is included at tools/generate_caustics.py. Install dependencies with:
+    pip install -r requirements-python.txt
+Then regenerate the texture from the project root:
+    python tools/generate_caustics.py
