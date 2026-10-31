@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050507">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="PERSPECTRA is an independent creative company working across brand, design, film, motion, digital campaigns and AI-assisted production.">
+<title>PERSPECTRA — Ideas Beyond Perspective</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--black:#050507;--ivory:#EFEBE2;--champagne:#F1D7AC;--amber:#FAA056;--blue:#6C9EE4;--violet:#685BE6;--midnight:#222B53;--grey:#A1A0A1;--line:rgba(239,235,226,.14);--max:1220px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--black);color:var(--ivory);font-family:Inter,Arial,sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}button{font:inherit}.wrap{width:min(var(--max),calc(100% - 48px));margin:auto}.nav{position:fixed;inset:0 0 auto;z-index:10;background:rgba(5,5,7,.72);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.07)}.navin{height:82px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:12px;font:800 17px Manrope,sans-serif;letter-spacing:.22em}.brand img{width:36px;height:36px;object-fit:contain}.links{display:flex;gap:30px;align-items:center;font-size:12px;color:#c7c4c0}.links a:hover{color:var(--champagne)}.navcta,.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 19px;border:1px solid rgba(241,215,172,.55);border-radius:2px;color:var(--ivory);font-size:11px;letter-spacing:.1em;text-transform:uppercase;transition:.25s}.navcta:hover,.btn:hover{background:var(--champagne);color:#111;border-color:var(--champagne)}.menu{display:none;background:none;border:0;color:var(--ivory);font-size:24px}
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:145px 0 85px;background:radial-gradient(ellipse at 72% 43%,rgba(104,91,230,.18),transparent 34%),radial-gradient(ellipse at 63% 48%,rgba(108,158,228,.12),transparent 25%),linear-gradient(115deg,#050507 45%,#090912 100%)}
+.hero:before{content:"";position:absolute;width:680px;height:680px;border:1px solid rgba(241,215,172,.12);border-radius:50%;right:-150px;top:12%;box-shadow:0 0 100px rgba(104,91,230,.08),inset 0 0 100px rgba(108,158,228,.04)}
+.hero:after{content:"";position:absolute;width:460px;height:460px;border:1px solid rgba(108,158,228,.16);border-radius:50%;right:-40px;top:25%}
+.herogrid{display:grid;grid-template-columns:1.05fr .95fr;gap:35px;align-items:center;position:relative;z-index:1}.eyebrow{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--champagne);display:flex;gap:12px;align-items:center}.eyebrow:before{content:"";width:34px;height:1px;background:linear-gradient(90deg,var(--amber),var(--violet))}h1,h2,h3{font-family:Manrope,Inter,sans-serif;margin:0;line-height:1.05}h1{font-size:clamp(52px,7vw,96px);letter-spacing:-.065em;font-weight:600;margin:26px 0}.gradient{background:linear-gradient(100deg,var(--ivory) 10%,var(--champagne) 43%,var(--blue) 76%,#a59aff);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{font-size:16px;line-height:1.85;color:#aaa8ac;max-width:550px}.actions{display:flex;gap:13px;margin-top:34px;flex-wrap:wrap}.btn.primary{background:var(--ivory);color:#111;border-color:var(--ivory)}.btn.primary:hover{background:var(--champagne);border-color:var(--champagne)}.heroart{min-height:480px;display:grid;place-items:center;position:relative}.heroart img{width:min(100%,590px);height:auto;filter:drop-shadow(0 15px 55px rgba(104,91,230,.22));mix-blend-mode:screen}.hero-caption{position:absolute;bottom:4px;right:12px;color:#77757e;font-size:9px;letter-spacing:.18em;text-transform:uppercase}
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:19px 0;color:#89878d;font-size:10px;letter-spacing:.22em;text-transform:uppercase;overflow:hidden;text-align:center}.marquee span{color:var(--champagne);padding:0 18px}
+section{padding:115px 0}.section-head{display:flex;justify-content:space-between;gap:40px;align-items:end;margin-bottom:54px}.kicker{color:var(--amber);font-size:10px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:16px}.section-head h2{font-size:clamp(36px,5vw,60px);letter-spacing:-.055em;max-width:650px}.section-head p{max-width:360px;color:#96939b;font-size:13px;line-height:1.8;margin:0}.services{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.service{padding:34px 30px 38px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:250px;transition:.3s}.service:hover{background:linear-gradient(135deg,rgba(104,91,230,.1),rgba(250,160,86,.035))}.num{font-size:10px;color:var(--violet);letter-spacing:.15em}.service h3{font-size:22px;margin:36px 0 13px;letter-spacing:-.03em}.service p{font-size:12px;color:#96939b;line-height:1.8;margin:0;max-width:300px}
+.statement{background:linear-gradient(110deg,rgba(34,43,83,.52),rgba(5,5,7,.2)),#0b0b11;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:100px 0}.statement .big{font:500 clamp(32px,5.4vw,68px)/1.15 Manrope,sans-serif;letter-spacing:-.055em;max-width:1000px}.statement .big em{font-style:normal;color:var(--champagne)}
+.workgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.workcard{min-height:380px;position:relative;overflow:hidden;background:linear-gradient(135deg,#171724,#0a0a0e);border:1px solid var(--line);display:flex;align-items:end;padding:28px}.workcard:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 25%,rgba(104,91,230,.32),transparent 35%),linear-gradient(145deg,transparent 25%,rgba(0,0,0,.65))}.workcard:nth-child(2):before{background:radial-gradient(circle at 65% 30%,rgba(250,160,86,.28),transparent 36%),linear-gradient(145deg,transparent 25%,rgba(0,0,0,.7))}.workcard:nth-child(3):before{background:radial-gradient(circle at 65% 30%,rgba(108,158,228,.3),transparent 36%),linear-gradient(145deg,transparent 25%,rgba(0,0,0,.7))}.workcard>*{position:relative}.workcard h3{font-size:27px;margin:9px 0}.workcard p{font-size:11px;color:#aaa;margin:0}.tag{font-size:9px;color:var(--champagne);letter-spacing:.2em;text-transform:uppercase}.worknote{font-size:10px;color:#77757e;margin-top:18px}
+.industries{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.industry{border:1px solid var(--line);padding:24px 18px;color:#c9c6c1;font:600 13px Manrope,sans-serif;min-height:95px;display:flex;align-items:end;background:linear-gradient(145deg,rgba(255,255,255,.025),transparent)}.industry:hover{border-color:rgba(241,215,172,.45);color:var(--champagne)}
+.process{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}.step{border-top:1px solid var(--line);padding-top:20px}.step b{font-size:10px;color:var(--violet);letter-spacing:.16em}.step h3{font-size:17px;margin:22px 0 10px}.step p{font-size:11px;color:#929098;line-height:1.8}
+.contact{padding:100px 0;background:radial-gradient(ellipse at 80% 60%,rgba(104,91,230,.18),transparent 35%),#09090d;border-top:1px solid var(--line)}.contact h2{font-size:clamp(42px,7vw,84px);letter-spacing:-.06em;max-width:850px;margin:20px 0}.contact p{color:#a09da5;max-width:520px;font-size:14px;line-height:1.8}.footer{padding:30px 0;border-top:1px solid var(--line);color:#77757e;font-size:10px}.footerin{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.footbrand{font:700 13px Manrope;letter-spacing:.2em;color:var(--ivory)}
+@media(max-width:850px){.links{display:none;position:absolute;top:82px;left:0;right:0;background:#09090d;padding:25px;flex-direction:column;align-items:flex-start;border-bottom:1px solid var(--line)}.links.open{display:flex}.menu{display:block}.navcta{display:none}.herogrid{grid-template-columns:1fr}.heroart{min-height:300px;max-height:390px}.heroart img{max-width:400px}.section-head{display:block}.section-head p{margin-top:20px}.services{grid-template-columns:repeat(2,1fr)}.workgrid{grid-template-columns:1fr}.industries{grid-template-columns:repeat(2,1fr)}.process{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.wrap{width:calc(100% - 34px)}.navin{height:70px}.links{top:70px}.hero{padding-top:120px}.heroart{min-height:250px}.services{grid-template-columns:1fr}.service{min-height:190px}.service h3{margin-top:22px}.industries{grid-template-columns:1fr 1fr}.process{grid-template-columns:1fr}.section-head{margin-bottom:35px}section{padding:78px 0}.statement{padding:75px 0}.workcard{min-height:290px}}
+</style>
+<style>
+/* Three.js visual layer */
+.hero{isolation:isolate}.heroart{perspective:1000px}.heroart canvas#prism-scene{position:absolute;inset:0;width:100%;height:100%;z-index:1;display:block;outline:0}.heroart img{position:relative;z-index:0;opacity:.16;transition:opacity .8s}.heroart.webgl-ready img{opacity:.055}.hero-caption{z-index:2}.heroart:after{content:"";position:absolute;width:72%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(104,91,230,.13),rgba(108,158,228,.045) 38%,transparent 70%);filter:blur(16px);pointer-events:none}.heroart .scene-label{position:absolute;z-index:3;left:4%;top:14%;font-size:9px;letter-spacing:.22em;color:rgba(239,235,226,.48);text-transform:uppercase}.heroart .scene-coord{position:absolute;z-index:3;right:3%;top:18%;font:10px Inter,sans-serif;letter-spacing:.12em;color:rgba(239,235,226,.38)}
+.service,.workcard,.industry{transform-style:preserve-3d;will-change:transform}.service{transition:transform .35s ease,border-color .35s ease,background .35s ease}.service:hover{transform:translateY(-5px);border-color:rgba(108,158,228,.35)}.workcard{background-color:#09090d}.workcard:after{content:"";position:absolute;inset:12px;border:1px solid rgba(239,235,226,.08);pointer-events:none;transform:translateZ(18px)}.workcard>div{transform:translateZ(24px)}.workcard:before{transition:transform .8s ease,opacity .8s ease}.workcard:hover:before{transform:scale(1.08) rotate(-2deg);opacity:1}.industry{transition:transform .25s ease,border-color .25s ease,color .25s ease}.industry:hover{transform:translateY(-4px)}
+@media(max-width:850px){.heroart canvas#prism-scene{opacity:.92}.heroart .scene-label,.heroart .scene-coord{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.heroart canvas#prism-scene{display:none}.service,.industry,.workcard:before{transition:none}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js"}}</script>
+</head>
+<body>
+<header class="nav"><div class="wrap navin">
+<a class="brand" href="#top"><img src="assets/perspectra_symbol_transparent.png" alt=""><span>PERSPECTRA</span></a>
+<nav class="links" id="links"><a href="#about">About</a><a href="#services">Services</a><a href="#work">Selected work</a><a href="#industries">Industries</a><a href="#process">Process</a><a href="#contact">Contact</a></nav>
+<a class="navcta" href="#contact">Start a project ↗</a><button class="menu" aria-label="Open menu" onclick="document.getElementById('links').classList.toggle('open')">☰</button>
+</div></header>
+<main id="top">
+<section class="hero"><div class="wrap herogrid">
+<div><div class="eyebrow">Independent creative company</div>
+<h1>Ideas beyond<br><span class="gradient">perspective.</span></h1>
+<p class="lead">We bring strategy, design, film and emerging production tools together to create distinctive visual communication for ambitious brands.</p>
+<div class="actions"><a class="btn primary" href="#work">Explore our work ↗</a><a class="btn" href="#contact">Start a conversation</a></div>
+</div>
+<div class="heroart"><img src="assets/perspectra_symbol_transparent.png" alt="PERSPECTRA prism symbol"><div class="hero-caption">Creative · Media · Technology</div></div>
+</div></section>
+<div class="marquee">Brand thinking <span>✦</span> Visual identity <span>✦</span> Film & motion <span>✦</span> AI-assisted production <span>✦</span> Digital campaigns</div>
+<section id="about"><div class="wrap"><div class="section-head"><div><div class="kicker">01 / About PERSPECTRA</div><h2>Different ways of seeing. One clear point of view.</h2></div><p>PERSPECTRA is an independent creative company working across brand, design, moving image and digital communication. We help businesses turn ideas into work people can understand, feel and remember.</p></div>
+<div class="statement" style="padding:54px 45px"><div class="big">We look at the brief from every angle, then find the <em>one idea worth bringing to life.</em></div></div></div></section>
+<section id="services"><div class="wrap"><div class="section-head"><div><div class="kicker">02 / What we do</div><h2>Creative thinking.<br>Made tangible.</h2></div><p>Connected capabilities for brands that need a thoughtful creative partner, from the first idea to the final delivery.</p></div>
+<div class="services">
+<article class="service"><span class="num">01 / IDENTITY</span><h3>Brand & Design</h3><p>Brand identity systems, campaign design, packaging, graphic design and digital experiences.</p></article>
+<article class="service"><span class="num">02 / MOVING IMAGE</span><h3>Film & Video</h3><p>Brand films, product films, commercials, social video, editing and post-production.</p></article>
+<article class="service"><span class="num">03 / NEW PRODUCTION</span><h3>AI Creative Production</h3><p>AI-assisted image making, visual development, image-to-video and creative prototyping.</p></article>
+<article class="service"><span class="num">04 / MOTION</span><h3>Motion & Animation</h3><p>Motion graphics, 2D and 3D animation, explainers and visual effects.</p></article>
+<article class="service"><span class="num">05 / DIGITAL</span><h3>Social & Campaigns</h3><p>Content strategy, social creative systems, campaign assets and ongoing content production.</p></article>
+<article class="service"><span class="num">06 / GROWTH</span><h3>Digital Advertising</h3><p>Ad creative concepts, campaign planning and performance-focused creative iterations.</p></article>
+</div></div></section>
+<div class="statement" id="approach"><div class="wrap"><div class="kicker">03 / Our point of view</div><div class="big">Technology can expand what is possible. <em>Creative direction decides what matters.</em></div></div></div>
+<section id="work"><div class="wrap"><div class="section-head"><div><div class="kicker">04 / Selected work</div><h2>Work that gives ideas a form.</h2></div><p>A selection of creative directions and concept spaces. New commissioned projects and verified case studies will be added as they are approved for publication.</p></div>
+<div class="workgrid">
+<article class="workcard"><div><span class="tag">Concept direction / 01</span><h3>Built environments</h3><p>Real estate films · Launch campaigns · Spatial storytelling</p></div></article>
+<article class="workcard"><div><span class="tag">Concept direction / 02</span><h3>Objects of desire</h3><p>Jewellery · Product imagery · Luxury campaign systems</p></div></article>
+<article class="workcard"><div><span class="tag">Concept direction / 03</span><h3>New expressions</h3><p>Fashion · Brand worlds · Motion-led storytelling</p></div></article>
+</div><p class="worknote">These are portfolio categories and creative directions, not claims of completed client engagements. Replace with approved project work and real results before launch.</p>
+</div></section>
+<section id="industries"><div class="wrap"><div class="section-head"><div><div class="kicker">05 / Who we work with</div><h2>Built around ambitious businesses.</h2></div><p>Starting with focused industry experience in India, with a production approach designed to serve brands across markets.</p></div>
+<div class="industries"><div class="industry">Real Estate</div><div class="industry">Jewellery & Luxury</div><div class="industry">Fashion & D2C</div><div class="industry">Food & Hospitality</div><div class="industry">Healthcare</div><div class="industry">Corporate</div><div class="industry">Consumer Brands</div><div class="industry">New Ventures</div></div></div></section>
+<section id="process"><div class="wrap"><div class="section-head"><div><div class="kicker">06 / How we work</div><h2>A clear process. Better creative.</h2></div><p>Good work comes from clear objectives, thoughtful collaboration and attention to detail at every stage.</p></div>
+<div class="process">
+<div class="step"><b>01 / DISCOVER</b><h3>Understand</h3><p>We learn about the business, audience, objective and constraints.</p></div>
+<div class="step"><b>02 / DEFINE</b><h3>Find the idea</h3><p>We align on the message, creative route and deliverables.</p></div>
+<div class="step"><b>03 / CREATE</b><h3>Make the work</h3><p>We develop, design, produce, edit and refine the creative.</p></div>
+<div class="step"><b>04 / REFINE</b><h3>Make it better</h3><p>We review together and improve the work against the brief.</p></div>
+<div class="step"><b>05 / DELIVER</b><h3>Put it to work</h3><p>We hand over organised assets and review performance where applicable.</p></div>
+</div></div></section>
+<section class="contact" id="contact"><div class="wrap"><div class="kicker">07 / Start a conversation</div><h2>Have an idea worth seeing differently?</h2><p>Tell us what you are building, launching or trying to communicate. We will help shape the right creative approach.</p>
+<div class="actions"><a class="btn primary" href="mailto:hello@perspectra.studio?subject=Project%20enquiry%20-%20PERSPECTRA">Email PERSPECTRA ↗</a><a class="btn" href="#top">Back to top ↑</a></div>
+<p style="font-size:10px;margin-top:28px;color:#77757e">Contact placeholder: replace hello@perspectra.studio with your confirmed business email before publishing.</p>
+</div></section>
+</main>
+<footer class="footer"><div class="wrap footerin"><div class="footbrand">PERSPECTRA</div><div>CREATIVE · MEDIA · TECHNOLOGY</div><div>© <span id="year"></span> PERSPECTRA. All rights reserved.</div></div></footer>
+<script>
+document.getElementById('year').textContent=new Date().getFullYear();
+document.querySelectorAll('.links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('links').classList.remove('open')));
+// Subtle pointer depth on selected work and service panels.
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+ document.querySelectorAll('.service,.workcard').forEach(card=>{
+  card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(900px) rotateX(${-y*3}deg) rotateY(${x*3}deg) translateY(-3px)`});
+  card.addEventListener('pointerleave',()=>card.style.transform='');
+ });
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+const host=document.getElementById('heroart');
+if(host && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+ try{
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(34,1,.1,100);camera.position.set(0,0,8.2);
+  const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(host.clientWidth,host.clientHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+  renderer.domElement.id='prism-scene';renderer.domElement.setAttribute('aria-label','Animated three-dimensional prism');host.prepend(renderer.domElement);host.classList.add('webgl-ready');
+  scene.add(new THREE.AmbientLight(0xffffff,.65));
+  const warm=new THREE.PointLight(0xffb66f,28,18);warm.position.set(-3,2.8,4);scene.add(warm);
+  const cool=new THREE.PointLight(0x658fff,34,18);cool.position.set(3,-1,3);scene.add(cool);
+  const violet=new THREE.PointLight(0x7564ff,22,15);violet.position.set(0,3,-2);scene.add(violet);
+  const group=new THREE.Group();scene.add(group);
+  // Faceted triangular prism, bevelled for a glass-like edge highlight.
+  const shape=new THREE.Shape();shape.moveTo(0,1.9);shape.lineTo(-1.65,-1.25);shape.lineTo(1.65,-1.25);shape.closePath();
+  const geometry=new THREE.ExtrudeGeometry(shape,{depth:.62,bevelEnabled:true,bevelSegments:5,steps:1,bevelSize:.12,bevelThickness:.12,curveSegments:8});geometry.center();
+  const glass=new THREE.MeshPhysicalMaterial({color:0xf1d7ac,metalness:.36,roughness:.16,transmission:.32,thickness:1.15,ior:1.48,clearcoat:1,clearcoatRoughness:.08,transparent:true,opacity:.94,side:THREE.DoubleSide});
+  const prism=new THREE.Mesh(geometry,glass);prism.rotation.set(.12,-.2,.08);group.add(prism);
+  // Fine luminous edge geometry keeps the prism legible against black.
+  const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geometry,18),new THREE.LineBasicMaterial({color:0xf1d7ac,transparent:true,opacity:.78}));edges.scale.set(1.006,1.006,1.006);edges.rotation.copy(prism.rotation);group.add(edges);
+  const innerShape=new THREE.Shape();innerShape.moveTo(0,1.05);innerShape.lineTo(-.92,-.78);innerShape.lineTo(.92,-.78);innerShape.closePath();
+  const innerGeo=new THREE.ExtrudeGeometry(innerShape,{depth:.12,bevelEnabled:true,bevelSegments:2,bevelSize:.045,bevelThickness:.04});innerGeo.center();
+  const inner=new THREE.Mesh(innerGeo,new THREE.MeshPhysicalMaterial({color:0x6c9ee4,metalness:.58,roughness:.2,emissive:0x171d5c,emissiveIntensity:.42,clearcoat:1}));inner.position.set(.02,.02,.38);group.add(inner);
+  const ringMat=new THREE.MeshBasicMaterial({color:0x6c9ee4,transparent:true,opacity:.38});
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(2.28,.004,8,180),ringMat);ring.rotation.set(.95,.25,.18);group.add(ring);
+  const ring2=new THREE.Mesh(new THREE.TorusGeometry(2.52,.003,8,180),new THREE.MeshBasicMaterial({color:0xf1d7ac,transparent:true,opacity:.2}));ring2.rotation.set(1.2,-.3,-.25);group.add(ring2);
+  // Sparse points of light add depth without turning the scene into a particle effect.
+  const count=190,positions=new Float32Array(count*3);for(let i=0;i<count;i++){const radius=2.8+Math.random()*2.8,a=Math.random()*Math.PI*2;positions[i*3]=Math.cos(a)*radius;positions[i*3+1]=(Math.random()-.5)*5.4;positions[i*3+2]=(Math.random()-.5)*3.2;}
+  const starsGeo=new THREE.BufferGeometry();starsGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));const stars=new THREE.Points(starsGeo,new THREE.PointsMaterial({color:0xc7c9e8,size:.018,transparent:true,opacity:.7,sizeAttenuation:true}));scene.add(stars);
+  let pointerX=0,pointerY=0,targetX=0,targetY=0;host.addEventListener('pointermove',e=>{const r=host.getBoundingClientRect();targetX=((e.clientX-r.left)/r.width-.5)*.42;targetY=((e.clientY-r.top)/r.height-.5)*.3;},{passive:true});host.addEventListener('pointerleave',()=>{targetX=0;targetY=0;},{passive:true});
+  const resize=()=>{const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);};new ResizeObserver(resize).observe(host);
+  const clock=new THREE.Clock();let frame=0;const animate=()=>{frame=requestAnimationFrame(animate);const t=clock.getElapsedTime();pointerX+=(targetX-pointerX)*.035;pointerY+=(targetY-pointerY)*.035;group.rotation.y=-.18+Math.sin(t*.22)*.12+pointerX;group.rotation.x=.08+Math.cos(t*.19)*.08+pointerY;group.rotation.z=Math.sin(t*.15)*.035;ring.rotation.z=.18+Math.sin(t*.12)*.08;ring2.rotation.y=-.3+t*.035;stars.rotation.y=t*.012;warm.intensity=25+Math.sin(t*.8)*4;renderer.render(scene,camera);};animate();
+  window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);renderer.dispose();geometry.dispose();glass.dispose();},{once:true});
+ }catch(e){console.warn('3D scene unavailable; using static brand mark.',e);}
+}
+</script>
+</body></html>
