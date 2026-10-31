@@ -22,3 +22,11 @@ section{padding:115px 0}.section-head{display:flex;justify-content:space-between
 .service,.workcard,.industry{transform-style:preserve-3d;will-change:transform}.service{transition:transform .35s ease,border-color .35s ease,background .35s ease}.service:hover{transform:translateY(-5px);border-color:rgba(108,158,228,.35)}.workcard{background-color:#09090d}.workcard:after{content:"";position:absolute;inset:12px;border:1px solid rgba(239,235,226,.08);pointer-events:none;transform:translateZ(18px)}.workcard>div{transform:translateZ(24px)}.workcard:before{transition:transform .8s ease,opacity .8s ease}.workcard:hover:before{transform:scale(1.08) rotate(-2deg);opacity:1}.industry{transition:transform .25s ease,border-color .25s ease,color .25s ease}.industry:hover{transform:translateY(-4px)}
 @media(max-width:850px){.heroart canvas#prism-scene{opacity:.92}.heroart .scene-label,.heroart .scene-coord{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.heroart canvas#prism-scene{display:none}.service,.industry,.workcard:before{transition:none}}
+
+/* Scroll-reactive PERSPECTRA glass prism */
+#perspectra-lightfield{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;opacity:.78;mix-blend-mode:screen}
+body>*:not(#perspectra-lightfield){position:relative;z-index:3}
+.nav{z-index:12}
+.heroart img{opacity:.16;filter:drop-shadow(0 0 28px rgba(108,158,228,.28))}
+@media(max-width:760px){#perspectra-lightfield{opacity:.48}}
+@media(prefers-reduced-motion:reduce){#perspectra-lightfield{display:none}}

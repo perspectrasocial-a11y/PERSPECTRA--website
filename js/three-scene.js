@@ -1,36 +1,87 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
-const host=document.querySelector('.heroart');
-if(host && !matchMedia('(prefers-reduced-motion: reduce)').matches){
- try{
-  const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(34,1,.1,100);camera.position.set(0,0,8.2);
-  const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(host.clientWidth,host.clientHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
-  renderer.domElement.id='prism-scene';renderer.domElement.setAttribute('aria-label','Animated three-dimensional prism');host.prepend(renderer.domElement);host.classList.add('webgl-ready');
-  scene.add(new THREE.AmbientLight(0xffffff,.65));
-  const warm=new THREE.PointLight(0xffb66f,28,18);warm.position.set(-3,2.8,4);scene.add(warm);
-  const cool=new THREE.PointLight(0x658fff,34,18);cool.position.set(3,-1,3);scene.add(cool);
-  const violet=new THREE.PointLight(0x7564ff,22,15);violet.position.set(0,3,-2);scene.add(violet);
-  const group=new THREE.Group();scene.add(group);
-  // Faceted triangular prism, bevelled for a glass-like edge highlight.
-  const shape=new THREE.Shape();shape.moveTo(0,1.9);shape.lineTo(-1.65,-1.25);shape.lineTo(1.65,-1.25);shape.closePath();
-  const geometry=new THREE.ExtrudeGeometry(shape,{depth:.62,bevelEnabled:true,bevelSegments:5,steps:1,bevelSize:.12,bevelThickness:.12,curveSegments:8});geometry.center();
-  const glass=new THREE.MeshPhysicalMaterial({color:0xf1d7ac,metalness:.36,roughness:.16,transmission:.32,thickness:1.15,ior:1.48,clearcoat:1,clearcoatRoughness:.08,transparent:true,opacity:.94,side:THREE.DoubleSide});
-  const prism=new THREE.Mesh(geometry,glass);prism.rotation.set(.12,-.2,.08);group.add(prism);
-  // Fine luminous edge geometry keeps the prism legible against black.
-  const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geometry,18),new THREE.LineBasicMaterial({color:0xf1d7ac,transparent:true,opacity:.78}));edges.scale.set(1.006,1.006,1.006);edges.rotation.copy(prism.rotation);group.add(edges);
-  const innerShape=new THREE.Shape();innerShape.moveTo(0,1.05);innerShape.lineTo(-.92,-.78);innerShape.lineTo(.92,-.78);innerShape.closePath();
-  const innerGeo=new THREE.ExtrudeGeometry(innerShape,{depth:.12,bevelEnabled:true,bevelSegments:2,bevelSize:.045,bevelThickness:.04});innerGeo.center();
-  const inner=new THREE.Mesh(innerGeo,new THREE.MeshPhysicalMaterial({color:0x6c9ee4,metalness:.58,roughness:.2,emissive:0x171d5c,emissiveIntensity:.42,clearcoat:1}));inner.position.set(.02,.02,.38);group.add(inner);
-  const ringMat=new THREE.MeshBasicMaterial({color:0x6c9ee4,transparent:true,opacity:.38});
-  const ring=new THREE.Mesh(new THREE.TorusGeometry(2.28,.004,8,180),ringMat);ring.rotation.set(.95,.25,.18);group.add(ring);
-  const ring2=new THREE.Mesh(new THREE.TorusGeometry(2.52,.003,8,180),new THREE.MeshBasicMaterial({color:0xf1d7ac,transparent:true,opacity:.2}));ring2.rotation.set(1.2,-.3,-.25);group.add(ring2);
-  // Sparse points of light add depth without turning the scene into a particle effect.
-  const count=190,positions=new Float32Array(count*3);for(let i=0;i<count;i++){const radius=2.8+Math.random()*2.8,a=Math.random()*Math.PI*2;positions[i*3]=Math.cos(a)*radius;positions[i*3+1]=(Math.random()-.5)*5.4;positions[i*3+2]=(Math.random()-.5)*3.2;}
-  const starsGeo=new THREE.BufferGeometry();starsGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));const stars=new THREE.Points(starsGeo,new THREE.PointsMaterial({color:0xc7c9e8,size:.018,transparent:true,opacity:.7,sizeAttenuation:true}));scene.add(stars);
-  let pointerX=0,pointerY=0,targetX=0,targetY=0;host.addEventListener('pointermove',e=>{const r=host.getBoundingClientRect();targetX=((e.clientX-r.left)/r.width-.5)*.42;targetY=((e.clientY-r.top)/r.height-.5)*.3;},{passive:true});host.addEventListener('pointerleave',()=>{targetX=0;targetY=0;},{passive:true});
-  const resize=()=>{const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);};new ResizeObserver(resize).observe(host);
-  const clock=new THREE.Clock();let frame=0;const animate=()=>{frame=requestAnimationFrame(animate);const t=clock.getElapsedTime();pointerX+=(targetX-pointerX)*.035;pointerY+=(targetY-pointerY)*.035;group.rotation.y=-.18+Math.sin(t*.22)*.12+pointerX;group.rotation.x=.08+Math.cos(t*.19)*.08+pointerY;group.rotation.z=Math.sin(t*.15)*.035;ring.rotation.z=.18+Math.sin(t*.12)*.08;ring2.rotation.y=-.3+t*.035;stars.rotation.y=t*.012;warm.intensity=25+Math.sin(t*.8)*4;renderer.render(scene,camera);};animate();
-  window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);renderer.dispose();geometry.dispose();glass.dispose();},{once:true});
- }catch(e){console.warn('3D scene unavailable; using static brand mark.',e);}
+
+// Scroll-reactive transparent glass prism and neural light field.
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !document.querySelector('#perspectra-lightfield')) {
+  try {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, .1, 100);
+    camera.position.set(0, 0, 9);
+    const renderer = new THREE.WebGLRenderer({alpha:true, antialias:true, powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.18;
+    renderer.domElement.id = 'perspectra-lightfield';
+    renderer.domElement.setAttribute('aria-hidden','true');
+    document.body.appendChild(renderer.domElement);
+
+    scene.add(new THREE.AmbientLight(0xffffff,.55));
+    const warm = new THREE.PointLight(0xffc98e,42,22); warm.position.set(-3,3,5); scene.add(warm);
+    const blue = new THREE.PointLight(0x659cff,48,22); blue.position.set(3,-2,4); scene.add(blue);
+    const violet = new THREE.PointLight(0x7564ff,30,18); violet.position.set(0,3,-3); scene.add(violet);
+
+    const rig = new THREE.Group(); scene.add(rig);
+    const shape = new THREE.Shape();
+    shape.moveTo(0,1.75); shape.lineTo(-1.48,-1.15); shape.lineTo(1.48,-1.15); shape.closePath();
+    const geo = new THREE.ExtrudeGeometry(shape,{depth:.72,bevelEnabled:true,bevelSegments:6,steps:1,bevelSize:.14,bevelThickness:.13});
+    geo.center();
+    const glass = new THREE.MeshPhysicalMaterial({
+      color:0xe9f1ff, metalness:.08, roughness:.055, transmission:.96,
+      thickness:2.2, ior:1.48, clearcoat:1, clearcoatRoughness:.025,
+      attenuationColor:new THREE.Color('#9bbdff'), attenuationDistance:2.4,
+      transparent:true, opacity:.96, side:THREE.DoubleSide
+    });
+    rig.add(new THREE.Mesh(geo,glass));
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo,12),
+      new THREE.LineBasicMaterial({color:0xf4d8ad,transparent:true,opacity:.9}));
+    edges.scale.setScalar(1.008); rig.add(edges);
+    const core = new THREE.Mesh(new THREE.OctahedronGeometry(.62,0),
+      new THREE.MeshPhysicalMaterial({color:0x789fff,metalness:.35,roughness:.1,transmission:.35,thickness:1.5,ior:1.6,emissive:0x1d2c80,emissiveIntensity:.45,clearcoat:1}));
+    core.position.z=.42; rig.add(core);
+    const halo = new THREE.Mesh(new THREE.RingGeometry(1.65,1.69,128),
+      new THREE.MeshBasicMaterial({color:0x7da9ff,transparent:true,opacity:.22,side:THREE.DoubleSide}));
+    halo.rotation.x=.4; rig.add(halo);
+
+    // Spectral light rays refract out from the prism.
+    const rays = new THREE.Group(); scene.add(rays);
+    [0xf1d7ac,0xfaa056,0x6c9ee4,0x685be6].forEach((c,i)=>{
+      const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(2.1+i*.34,.24-i*.17,-.1)]);
+      rays.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:c,transparent:true,opacity:.34})));
+    });
+
+    // Neural network: connected nodes with a subtle, drifting signal field.
+    const nodes=[];
+    for(let i=0;i<54;i++) nodes.push(new THREE.Vector3((Math.random()-.5)*7.2,(Math.random()-.5)*5.2,(Math.random()-.5)*2.5-1));
+    const nodeGeo=new THREE.BufferGeometry().setFromPoints(nodes);
+    const nodeCloud=new THREE.Points(nodeGeo,new THREE.PointsMaterial({color:0xb6c9ff,size:.035,transparent:true,opacity:.68}));
+    scene.add(nodeCloud);
+    const links=[];
+    nodes.forEach((a,i)=>nodes.forEach((b,j)=>{if(j>i&&a.distanceTo(b)<1.45)links.push(a.x,a.y,a.z,b.x,b.y,b.z)}));
+    const linkGeo=new THREE.BufferGeometry(); linkGeo.setAttribute('position',new THREE.Float32BufferAttribute(links,3));
+    const network=new THREE.LineSegments(linkGeo,new THREE.LineBasicMaterial({color:0x7895db,transparent:true,opacity:.12}));
+    scene.add(network);
+
+    let scrollTarget=0,scrollSmooth=0,px=0,py=0;
+    const updateScroll=()=>scrollTarget=Math.min(1,Math.max(0,scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight)));
+    addEventListener('scroll',updateScroll,{passive:true}); updateScroll();
+    addEventListener('pointermove',e=>{px=(e.clientX/innerWidth-.5)*.35;py=(e.clientY/innerHeight-.5)*.25},{passive:true});
+    addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+    const clock=new THREE.Clock(); let raf;
+    const animate=()=>{
+      raf=requestAnimationFrame(animate); const t=clock.getElapsedTime();
+      scrollSmooth+=(scrollTarget-scrollSmooth)*.045;
+      rig.position.set(THREE.MathUtils.lerp(2.45,-2.35,scrollSmooth)+Math.sin(scrollSmooth*Math.PI*3)*.32+px,
+                       THREE.MathUtils.lerp(1.45,-1.35,scrollSmooth)-py,0);
+      rig.scale.setScalar(THREE.MathUtils.lerp(.82,.62,scrollSmooth));
+      rig.rotation.set(.1+Math.cos(t*.26)*.1+py*.5,-.22+Math.sin(t*.32)*.13+px*.5,Math.sin(t*.18)*.04);
+      core.rotation.set(t*.22,-t*.31,0); halo.rotation.z=t*.12;
+      rays.position.copy(rig.position); rays.rotation.copy(rig.rotation); rays.scale.copy(rig.scale);
+      nodeCloud.rotation.y=network.rotation.y=Math.sin(t*.08)*.07;
+      warm.intensity=38+Math.sin(t*.9)*8; blue.intensity=44+Math.cos(t*.7)*9;
+      renderer.render(scene,camera);
+    };
+    animate();
+    addEventListener('pagehide',()=>{cancelAnimationFrame(raf);renderer.dispose();geo.dispose();glass.dispose();nodeGeo.dispose();linkGeo.dispose()},{once:true});
+  } catch(err) { console.warn('PERSPECTRA 3D light field unavailable.',err); }
 }
